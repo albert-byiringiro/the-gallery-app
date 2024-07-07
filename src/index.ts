@@ -43,6 +43,15 @@ function loadImages(urls:string[]): Promise<HTMLImageElement[]> {
   }))
 }
 
+// shuffle array
+function shuffleArray<T>(array: T[]): T[] {
+  for (let i = array.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [array[i], array[j]] = [array[j], array[i]];
+  }
+  return array;
+}
+
 async function displayPictures() {
   if (!galleryContainer) {
     console.log('GAllery container not found.');
@@ -54,7 +63,7 @@ async function displayPictures() {
   `
 
   const picsum = await fetchData(url);
-  const images = picsum.map((pic) => pic.download_url);
+  let images = picsum.map((pic) => pic.download_url);
 
   try {
     const loadedImages = await loadImages(images);
@@ -77,4 +86,29 @@ async function displayPictures() {
   }
 }
 
+function shuffleAndDisplayImages() {
+  if (!galleryContainer) {
+    console.error('Gallery container not found.');
+    return;
+  }
+
+  const images = Array.from(galleryContainer.querySelectorAll('img'));
+  const shuffledImages = shuffleArray(images);
+
+  galleryContainer.innerHTML = '';
+
+  const fragment = document.createDocumentFragment();
+
+  shuffledImages.forEach((img) => {
+    const div = document.createElement('div');
+    div.className = 'overflow-hidden rounded-lg shadow-md';
+    div.appendChild(img);
+    fragment.appendChild(div);
+  });
+
+  galleryContainer.appendChild(fragment);
+}
+
 displayPictures();
+
+shuffleButton?.addEventListener('click', shuffleAndDisplayImages);

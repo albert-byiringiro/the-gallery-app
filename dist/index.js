@@ -42,6 +42,14 @@ function loadImages(urls) {
         });
     }));
 }
+// shuffle array
+function shuffleArray(array) {
+    for (let i = array.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [array[i], array[j]] = [array[j], array[i]];
+    }
+    return array;
+}
 function displayPictures() {
     return __awaiter(this, void 0, void 0, function* () {
         if (!galleryContainer) {
@@ -52,7 +60,7 @@ function displayPictures() {
     <div class="loading text-center text-gray-500">Loading...</div>
   `;
         const picsum = yield fetchData(url);
-        const images = picsum.map((pic) => pic.download_url);
+        let images = picsum.map((pic) => pic.download_url);
         try {
             const loadedImages = yield loadImages(images);
             galleryContainer.innerHTML = ``;
@@ -71,5 +79,23 @@ function displayPictures() {
         }
     });
 }
+function shuffleAndDisplayImages() {
+    if (!galleryContainer) {
+        console.error('Gallery container not found.');
+        return;
+    }
+    const images = Array.from(galleryContainer.querySelectorAll('img'));
+    const shuffledImages = shuffleArray(images);
+    galleryContainer.innerHTML = '';
+    const fragment = document.createDocumentFragment();
+    shuffledImages.forEach((img) => {
+        const div = document.createElement('div');
+        div.className = 'overflow-hidden rounded-lg shadow-md';
+        div.appendChild(img);
+        fragment.appendChild(div);
+    });
+    galleryContainer.appendChild(fragment);
+}
 displayPictures();
+shuffleButton === null || shuffleButton === void 0 ? void 0 : shuffleButton.addEventListener('click', shuffleAndDisplayImages);
 export {};
