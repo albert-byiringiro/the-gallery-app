@@ -10,7 +10,7 @@ const galleryContainer = document.querySelector<HTMLDivElement>('.gallery-contai
 const shuffleButton = document.querySelector<HTMLButtonElement>('#shuffleButton');
 
 // api for images
-const url = `https://picsum.photos/v2/list?page=2&limit=100`;
+const url = `https://picsum.photos/v2/list?page=2&limit=10`;
 
 // fetch for data
 async function fetchData(url:string): Promise<Pic[]> {
@@ -40,3 +40,38 @@ function loadImages(urls:string[]): Promise<HTMLImageElement[]> {
     })
   }))
 }
+
+async function displayPictures() {
+  if (!galleryContainer) {
+    console.log('GAllery container not found.');
+    return;
+  }
+
+  galleryContainer.innerHTML = `
+    <div>Loading...</div>
+  `
+
+  const picsum = await fetchData(url);
+  const images = picsum.map((pic) => pic.download_url);
+
+  try {
+    const loadedImages = await loadImages(images);
+    galleryContainer.innerHTML = ``;
+
+    const fragment = document.createDocumentFragment();
+
+    loadedImages.forEach((img)=>{
+      const div = document.createElement('div');
+      div.appendChild(img);
+      fragment.appendChild(div);
+    });
+
+    galleryContainer.appendChild(fragment);
+  } catch (error) {
+    console.error(`Error loading images:`, error);
+    galleryContainer.innerHTML = `<div>Failed to load images.</div>`
+    
+  }
+}
+
+displayPictures();

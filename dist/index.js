@@ -11,7 +11,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 const galleryContainer = document.querySelector('.gallery-container');
 const shuffleButton = document.querySelector('#shuffleButton');
 // api for images
-const url = `https://picsum.photos/v2/list?page=2&limit=100`;
+const url = `https://picsum.photos/v2/list?page=2&limit=10`;
 // fetch for data
 function fetchData(url) {
     return __awaiter(this, void 0, void 0, function* () {
@@ -40,4 +40,33 @@ function loadImages(urls) {
         });
     }));
 }
+function displayPictures() {
+    return __awaiter(this, void 0, void 0, function* () {
+        if (!galleryContainer) {
+            console.log('GAllery container not found.');
+            return;
+        }
+        galleryContainer.innerHTML = `
+    <div>Loading...</div>
+  `;
+        const picsum = yield fetchData(url);
+        const images = picsum.map((pic) => pic.download_url);
+        try {
+            const loadedImages = yield loadImages(images);
+            galleryContainer.innerHTML = ``;
+            const fragment = document.createDocumentFragment();
+            loadedImages.forEach((img) => {
+                const div = document.createElement('div');
+                div.appendChild(img);
+                fragment.appendChild(div);
+            });
+            galleryContainer.appendChild(fragment);
+        }
+        catch (error) {
+            console.error(`Error loading images:`, error);
+            galleryContainer.innerHTML = `<div>Failed to load images.</div>`;
+        }
+    });
+}
+displayPictures();
 export {};
