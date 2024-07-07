@@ -28,3 +28,11 @@ function fetchData(url) {
         }
     });
 }
+function displayPictures() {
+    return __awaiter(this, void 0, void 0, function* () {
+        const picsum = yield fetchData(url);
+        const image = picsum.map((pic) => pic.url);
+        console.log(image);
+    });
+}
+displayPictures();

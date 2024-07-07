@@ -20,3 +20,11 @@ async function fetchData(url:string){
   }
 }
 
+async function displayPictures() {
+  const picsum = await fetchData(url);
+  const image = picsum.map((pic: any) => pic.url)
+  console.log(image);
+  
+}
+
+displayPictures()
