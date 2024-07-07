@@ -61,6 +61,7 @@ function displayPictures() {
   `;
         const picsum = yield fetchData(url);
         let images = picsum.map((pic) => pic.download_url);
+        images = shuffleArray(images);
         try {
             const loadedImages = yield loadImages(images);
             galleryContainer.innerHTML = ``;

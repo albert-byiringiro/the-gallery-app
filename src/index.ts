@@ -65,6 +65,8 @@ async function displayPictures() {
   const picsum = await fetchData(url);
   let images = picsum.map((pic) => pic.download_url);
 
+  images = shuffleArray(images);
+
   try {
     const loadedImages = await loadImages(images);
     galleryContainer.innerHTML = ``;
