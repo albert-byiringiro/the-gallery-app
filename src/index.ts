@@ -29,6 +29,7 @@ async function fetchData(url:string): Promise<Pic[]> {
   }
 }
 
+// boilerplate to loadImages
 function loadImages(urls:string[]): Promise<HTMLImageElement[]> {
   return Promise.all(urls.map((url)=> {
     return new Promise<HTMLImageElement>((resolve, reject) => {
@@ -48,7 +49,7 @@ async function displayPictures() {
   }
 
   galleryContainer.innerHTML = `
-    <div>Loading...</div>
+    <div class="loading text-center text-gray-500">Loading...</div>
   `
 
   const picsum = await fetchData(url);
@@ -62,6 +63,7 @@ async function displayPictures() {
 
     loadedImages.forEach((img)=>{
       const div = document.createElement('div');
+      div.className = `overflow-hidden rounded-lg shadow-md`
       div.appendChild(img);
       fragment.appendChild(div);
     });
@@ -69,7 +71,7 @@ async function displayPictures() {
     galleryContainer.appendChild(fragment);
   } catch (error) {
     console.error(`Error loading images:`, error);
-    galleryContainer.innerHTML = `<div>Failed to load images.</div>`
+    galleryContainer.innerHTML = `<div class="error text-center text-red-500">Failed to load images.</div>`
     
   }
 }

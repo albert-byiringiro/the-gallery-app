@@ -29,6 +29,7 @@ function fetchData(url) {
         }
     });
 }
+// boilerplate to loadImages
 function loadImages(urls) {
     return Promise.all(urls.map((url) => {
         return new Promise((resolve, reject) => {
@@ -47,7 +48,7 @@ function displayPictures() {
             return;
         }
         galleryContainer.innerHTML = `
-    <div>Loading...</div>
+    <div class="loading text-center text-gray-500">Loading...</div>
   `;
         const picsum = yield fetchData(url);
         const images = picsum.map((pic) => pic.download_url);
@@ -57,6 +58,7 @@ function displayPictures() {
             const fragment = document.createDocumentFragment();
             loadedImages.forEach((img) => {
                 const div = document.createElement('div');
+                div.className = `overflow-hidden rounded-lg shadow-md`;
                 div.appendChild(img);
                 fragment.appendChild(div);
             });
@@ -64,7 +66,7 @@ function displayPictures() {
         }
         catch (error) {
             console.error(`Error loading images:`, error);
-            galleryContainer.innerHTML = `<div>Failed to load images.</div>`;
+            galleryContainer.innerHTML = `<div class="error text-center text-red-500">Failed to load images.</div>`;
         }
     });
 }
