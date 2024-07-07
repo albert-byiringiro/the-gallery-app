@@ -10,7 +10,7 @@ const galleryContainer = document.querySelector<HTMLDivElement>('.gallery-contai
 const shuffleButton = document.querySelector<HTMLButtonElement>('#shuffleButton');
 
 // api for images
-const url = `https://picsum.photos/v2/list?page=2&limit=10`;
+const url = `https://picsum.photos/v2/list?page=2&limit=20`;
 
 // fetch for data
 async function fetchData(url:string): Promise<Pic[]> {
@@ -36,6 +36,7 @@ function loadImages(urls:string[]): Promise<HTMLImageElement[]> {
       const img = new Image();
       img.src = url;
       img.alt = 'Gallery image';
+      img.className = 'object-cover w-full h-full';
       img.onload = () => resolve(img);
       img.onerror = () => reject(new Error(`Failed to load image: ${url}`));
     })

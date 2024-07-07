@@ -11,7 +11,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 const galleryContainer = document.querySelector('.gallery-container');
 const shuffleButton = document.querySelector('#shuffleButton');
 // api for images
-const url = `https://picsum.photos/v2/list?page=2&limit=10`;
+const url = `https://picsum.photos/v2/list?page=2&limit=20`;
 // fetch for data
 function fetchData(url) {
     return __awaiter(this, void 0, void 0, function* () {
@@ -36,6 +36,7 @@ function loadImages(urls) {
             const img = new Image();
             img.src = url;
             img.alt = 'Gallery image';
+            img.className = 'object-cover w-full h-full';
             img.onload = () => resolve(img);
             img.onerror = () => reject(new Error(`Failed to load image: ${url}`));
         });
